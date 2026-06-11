@@ -90,7 +90,7 @@ jobs:
             echo "Current session: ${ROLE_SESSION}"
 
       - name: Synth CDK stack
-        run: npx cdk synth 
+        run: npx cdk synth --profile student
 
       - name: Deploy CDK stack
-        run: npx cdk deploy --require-approval never
+        run: npx cdk deploy --profile student --require-approval never
