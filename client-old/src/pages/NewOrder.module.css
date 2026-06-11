@@ -1,0 +1,74 @@
+.wrap {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .form {
+    margin-top: 24px;
+    background: #ffffff;
+    border: 2px solid #d8dcea;
+    border-radius: 16px;
+    padding: 24px;
+  }
+  
+  label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #07074e;
+    margin-bottom: 18px;
+  }
+  
+  select,
+  input {
+    margin-top: 6px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d8dcea;
+    font-size: 14px;
+  }
+  
+  .items {
+    margin-top: 12px;
+  }
+  
+  .itemRow {
+    display: grid;
+    grid-template-columns: 1fr 100px 40px;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  
+  .add {
+    margin-top: 8px;
+    background: #ddeaf0;
+    border: 1px dashed #588bb4;
+    color: #07074e;
+    padding: 8px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  
+  .remove {
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #c0392b;
+  }
+  
+  .submit {
+    margin-top: 20px;
+    background: #3a4fa2;
+    color: #ffffff;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .submit:hover {
+    background: #588bb4;
+  }

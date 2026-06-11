@@ -1,0 +1,6 @@
+Write a file with functions covering delivery functionality, including:
+
+ - adding new deliveries of orders with customer and product info
+ - checking the status of specific deliveries and all deliveries for a customer
+ - cancelling specific deliveries
+ - getting info on all active deliveries
