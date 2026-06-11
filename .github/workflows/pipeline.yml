@@ -25,11 +25,10 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: aws-iac-06-aurora-serverless-with-cdk/exercise/bakehouse-app/package-lock.json
 
       - name: Install dependencies
         run: |
-          .\aws-iac-06-aurora-serverless-with-cdk\exercise\bakehouse-app\install.sh
+          .\install.sh
 
       - name: Set environment variables
         run: |
