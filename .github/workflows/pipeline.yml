@@ -35,12 +35,58 @@ jobs:
         run: |
           echo "STACK_NAME=${{ env.STACK_NAME }}" >> $GITHUB_ENV
 
-      # 4. Configure / login to AWS (OIDC)
-      - name: Configure AWS credentials
+      - name: Extract student information
+        id: student-info
+        run: |
+            # github.actor contains the GitHub username of who triggered the workflow
+            STUDENT_NAME="${{ github.actor }}"
+            echo "name=${STUDENT_NAME}" >> $GITHUB_OUTPUT
+            echo "Student: ${STUDENT_NAME}"
+
+      - name: Generate enhanced session name
+        id: session-naming
+        run: |
+            # Enhanced session naming with:
+            # - Student identifier (github.actor)
+            # - Unique run ID (github.run_id)
+            # - Retry attempt (github.run_attempt)
+
+            STUDENT="${{ github.actor }}"
+            RUN_ID="${{ github.run_id }}"
+            ATTEMPT="${{ github.run_attempt }}"
+
+            SESSION_NAME="gha-cdk-${STUDENT}-${RUN_ID}-${ATTEMPT}"
+
+            echo "session-name=${SESSION_NAME}" >> $GITHUB_OUTPUT
+            echo "Generated session name: ${SESSION_NAME}"
+            echo "Length: ${#SESSION_NAME} characters (max 64)"
+
+            # Validate length
+            if [ ${#SESSION_NAME} -gt 64 ]; then
+                echo "❌ Session name too long!"
+                exit 1
+            fi
+      - name: Configure AWS credentials via OIDC
+        # ENHANCED: Session name includes student identifier and retry attempt
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_REGION }}
+            role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+            # Session name now includes:
+            # gha-cdk-{student}-{run_id}-{attempt}
+            # Example: gha-cdk-alice-1234567890-1
+            role-session-name: ${{ needs.setup.outputs.session-name }}
+            aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify OIDC credentials
+        run: |
+            echo "Verifying AWS credentials..."
+            IDENTITY=$(aws sts get-caller-identity)
+            echo "Assumed role:"
+            echo "${IDENTITY}" | jq '.'
+
+            # Extract role session name from assumed identity
+            ROLE_SESSION=$(echo "${IDENTITY}" | jq -r '.Arn' | grep -oP '(?<=/)[^/]+$')
+            echo "Current session: ${ROLE_SESSION}"
 
       - name: Synth CDK stack
         run: npx cdk synth $STACK_NAME
