@@ -11,6 +11,7 @@ env:
   AWS_REGION: eu-west-2
   PLAYWRIGHT_BASE_URL: https://bakehouse.cta-training.academy
   BAKEHOUSE_STACK_NAME: filsan-alisamatar-bakehouse
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN}}
   
 jobs:
   deploy:
@@ -33,7 +34,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "STACK_NAME=${{ env.STACK_NAME }}" >> $GITHUB_ENV
+          echo "BAKEHOUSE_STACK_NAME=${{ env.BAKEHOUSE_STACK_NAME }}" >> $GITHUB_ENV
 
       - name: Extract student information
         id: student-info
@@ -89,7 +90,7 @@ jobs:
             echo "Current session: ${ROLE_SESSION}"
 
       - name: Synth CDK stack
-        run: npx cdk synth $STACK_NAME
+        run: npx cdk synth 
 
       - name: Deploy CDK stack
-        run: npx cdk deploy $STACK_NAME --require-approval never
+        run: npx cdk deploy --require-approval never
