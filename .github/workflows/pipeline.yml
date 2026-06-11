@@ -74,7 +74,7 @@ jobs:
             # Session name now includes:
             # gha-cdk-{student}-{run_id}-{attempt}
             # Example: gha-cdk-alice-1234567890-1
-            role-session-name: ${{ needs.setup.outputs.session-name }}
+            role-session-name: ${{ steps.session-naming.outputs.session-name }}
             aws-region: ${{ env.AWS_REGION }}
 
       - name: Verify OIDC credentials
