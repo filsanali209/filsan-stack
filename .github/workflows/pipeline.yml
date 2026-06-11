@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          .\install.sh
+          ./install.sh
 
       - name: Set environment variables
         run: |
