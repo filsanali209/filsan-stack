@@ -1,0 +1,49 @@
+name: Deploy Stack
+
+on:
+  push:
+    branches: [cicd]
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: eu-west-2
+  PLAYWRIGHT_BASE_URL: https://bakehouse.cta-training.academy
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: aws-iac-06-aurora-serverless-with-cdk/exercise/bakehouse-app/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          .\aws-iac-06-aurora-serverless-with-cdk\exercise\bakehouse-app\install.sh
+
+      - name: Set environment variables
+        run: |
+          echo "STACK_NAME=${{ env.STACK_NAME }}" >> $GITHUB_ENV
+
+      # 4. Configure / login to AWS (OIDC)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Synth CDK stack
+        run: npx cdk synth $STACK_NAME
+
+      - name: Deploy CDK stack
+        run: npx cdk deploy $STACK_NAME --require-approval never
