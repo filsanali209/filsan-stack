@@ -2,7 +2,7 @@ name: Deploy Stack
 
 on:
   push:
-    branches: [cicd]
+    branches: [main]
 permissions:
   id-token: write
   contents: read
