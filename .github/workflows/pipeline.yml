@@ -94,3 +94,10 @@ jobs:
 
       - name: Deploy CDK stack
         run: npx cdk deploy --require-approval never
+      
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run playwright tests
+        run: npm run test:e2e ../../test/playwright
+
