@@ -117,7 +117,7 @@ jobs:
         run: npx playwright install --with-deps chromium
  
       - name: Run Playwright functional tests
-        run: npm run test:e2e .test/playwright/basic-example.spec.js
+        run: npm run test:e2e .test/playwright/basic-example.spec.cjs
         env:
           CI: true
 
