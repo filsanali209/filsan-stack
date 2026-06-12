@@ -1,6 +1,5 @@
 {
   "app": "node bin/bakehouse-app.js",
-  "profile" : "student",
   "watch": {
     "include": [
       "**"
